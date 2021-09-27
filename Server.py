@@ -12,11 +12,15 @@ DISCONNECT_MESSAGE = "!DISCONNECT"
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
 
+msg_global = 'sharks'
+
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {addr} connected.")
 
     connected = True
     name_recieved = 0
+    conn = conn
+
 
 
     while connected:
@@ -26,25 +30,50 @@ def handle_client(conn, addr):
 
             msg_length = int(msg_length)
             msg = conn.recv(msg_length).decode(FORMAT)
+
+            global msg_global
+            msg_global = msg
+            #msg_new = msg_global
+            #print(f"[VARS]", msg_global, msg, msg_new, msg_old)
             while name_recieved == 0:
                 name = msg
                 print(f"[CLIENT NAMED] {addr} is now known as {name}")
                 name_recieved = 1
+
+                #start ny thread til at skubbe beskeder til denne client.
+                pushThread = threading.Thread(target=send, args=(conn, name))
+                pushThread.start()
+                print("[STARTING pushThread]")
 
             if msg == DISCONNECT_MESSAGE:
                 print(f"[CLIENT DISCONNECT] Client {addr} disconnected")
                 connected = False
 
             print(f"[{addr}] {msg}")
+
         if connected == False:
             break
 
-def send_msg(conn, message):
-    welcome_msg = "Hello, you are now connected to SERVER"
-    conn.send(welcome_msg.encode(FORMAT))
-    #print(f"msg sent {message}, {message.encode(FORMAT)} to {conn}")
-    while True:
-        conn.send(message.encode(FORMAT))
+
+def send(conn, name):
+    connected = True
+    msg_new = "yeet"
+    msg_old = msg_new
+    global msg_global
+
+    while connected:
+
+        msg_new = msg_global
+
+        if msg_new != msg_old:
+            msg = '-' +  name + ' ' + msg_new
+            conn.send(msg.encode(FORMAT))
+            #send(conn, msg_new)
+
+            print(f"[MSG SENT] sent {msg_new}")
+
+            msg_old = msg_new
+        #time.sleep(10)
 
 
 def start():
@@ -55,6 +84,8 @@ def start():
         thread = threading.Thread(target=handle_client, args=(conn, addr))
         thread.start()
         print(f"[ACTIVE CONNECTIONS] {threading.activeCount() -1}")
+
+
 
 print("[STARTING]")
 
