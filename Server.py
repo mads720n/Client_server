@@ -12,15 +12,14 @@ DISCONNECT_MESSAGE = "!DISCONNECT"
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
 
-msg_global = 'sharks'
+msg_global = 'NULL'
 
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {addr} connected.")
 
     connected = True
     name_recieved = 0
-    conn = conn
-
+    name = "NULL"
 
 
     while connected:
@@ -31,8 +30,11 @@ def handle_client(conn, addr):
             msg_length = int(msg_length)
             msg = conn.recv(msg_length).decode(FORMAT)
 
+
             global msg_global
-            msg_global = msg
+            if name != "NULL":
+                msg_global = 'User/' + name + ': ' + msg
+
             #msg_new = msg_global
             #print(f"[VARS]", msg_global, msg, msg_new, msg_old)
             while name_recieved == 0:
@@ -57,7 +59,7 @@ def handle_client(conn, addr):
 
 def send(conn, name):
     connected = True
-    msg_new = "yeet"
+    msg_new = "NULL"
     msg_old = msg_new
     global msg_global
 
@@ -66,7 +68,7 @@ def send(conn, name):
         msg_new = msg_global
 
         if msg_new != msg_old:
-            msg = '-' +  name + ' ' + msg_new
+            msg = msg_new
             conn.send(msg.encode(FORMAT))
             #send(conn, msg_new)
 
