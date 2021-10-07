@@ -1,4 +1,3 @@
-import modules.indast5SlagskibsSkud2
 import socket
 import threading
 import time
@@ -9,11 +8,13 @@ SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
-
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(ADDR)
-
 msg_global = 'NULL'
+
+def serverStart():
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind(ADDR)
+
+
 
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {addr} connected.")
@@ -79,7 +80,8 @@ def send(conn, name):
         #time.sleep(10)
 
 
-def start():
+def listenStart():
+    print("[STARTING]")
     server.listen()
     print(f"[LISTENING] Server is listening on {SERVER}")
     while True:
@@ -89,7 +91,5 @@ def start():
         print(f"[ACTIVE CONNECTIONS] {threading.activeCount() -1}")
 
 
-
-print("[STARTING]")
-
-start()
+#serverStart()
+#listenStart()
