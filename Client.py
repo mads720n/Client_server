@@ -59,17 +59,17 @@ class client():
     #Starter recieve funktionen i seperat tråd
     thread = threading.Thread(target=recieve)
     thread.start()
-
+class messaging():
     #Messaging loop
     while True:
         besked = input()
         besked = str(besked)
 
-        #kun ved DISCONNECT_MESSAGE
+            #kun ved DISCONNECT_MESSAGE
         if besked == DISCONNECT_MESSAGE:
-            sender(besked)
+            client.sender(besked)
             print(f"[DISCONNECTED]")
             break
-        #ellers normal funktion via send funktionen
+            #ellers normal funktion via send funktionen
         else:
-            sender(besked)
+            client.sender(besked)
