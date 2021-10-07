@@ -8,7 +8,6 @@ DISCONNECT_MESSAGE = "!DISCONNECT"
 SERVER = "10.107.169.167"
 ADDR = (SERVER, PORT)
 
-client.sender()
 class client():
 
     global server

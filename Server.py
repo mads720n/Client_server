@@ -43,7 +43,7 @@ class client():
                     name_recieved = 1
 
                     #start ny thread til at skubbe beskeder til denne client.
-                    pushThread = threading.Thread(target=send, args=(conn, name))
+                    pushThread = threading.Thread(target=client.send, args=(conn, name))
                     pushThread.start()
                     print("[STARTING pushThread]")
 
@@ -88,7 +88,7 @@ class listen():
         print(f"[LISTENING] Server is listening on {SERVER}")
         while True:
             conn, addr = server.accept()
-            thread = threading.Thread(target=handle_client, args=(conn, addr))
+            thread = threading.Thread(target=client.handle_client, args=(conn, addr))
             thread.start()
             print(f"[ACTIVE CONNECTIONS] {threading.activeCount() -1}")
 
@@ -97,7 +97,7 @@ class listen():
 
 
 
-
+listen.listenStart()
 
 
 #serverStart()
