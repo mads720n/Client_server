@@ -1,3 +1,4 @@
+import modules.indast5SlagskibsSkud2
 import socket
 import threading
 import time
